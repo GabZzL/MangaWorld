@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { getMangas, getMangaById, createManga } from "../handlers/inventory";
+import {
+  getMangas,
+  getMangaById,
+  createManga,
+  updateManga,
+  deleteManga,
+} from "../handlers/inventory";
 
 const router = Router();
 
@@ -9,6 +15,10 @@ router.get("/", getMangas);
 router.get("/:id", getMangaById);
 // post manga
 router.post("/", createManga);
+// update manga
+router.patch("/:id", updateManga);
+// delete manga
+router.delete("/:id", deleteManga);
 
 const storeRoutes = router;
 export default storeRoutes;

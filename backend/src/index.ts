@@ -1,6 +1,7 @@
 import express from "express";
 import { Request, Response } from "express-serve-static-core";
 import storeRoutes from "./routes/inventory";
+import { errorHandler } from "./handlers/error";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,6 +10,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// routes
 app.get("/", (req: Request, res: Response) => {
   res
     .status(200)
@@ -16,6 +18,9 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/inventory", storeRoutes);
+
+// error handling middleware
+app.use(errorHandler);
 
 // start the server
 app.listen(port, () => {
