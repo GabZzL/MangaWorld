@@ -1,9 +1,4 @@
-import {
-  Request,
-  Response,
-  NextFunction,
-  RequestHandler,
-} from "express-serve-static-core";
+import { RequestHandler } from "express-serve-static-core";
 import { QueryResult } from "pg";
 import pool from "../db";
 import { CreateMangaDto, UpdateMangaDto } from "../dtos/Manga.dto";
@@ -111,31 +106,20 @@ export const createManga: RequestHandler<
     stock,
     price,
     publicationYear,
-    addedDate,
   } = req.body;
 
   try {
     await pool.query("BEGIN"); //start transaction
 
     const mangaInsertQuery = `
-      INSERT INTO manga (isbn, title, volume, author, language, stock, price, publication_year, added_date)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+      INSERT INTO manga (isbn, title, volume, author, language, stock, price, publication_year)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
       RETURNING id;
     `;
 
     const { rows, rowCount }: QueryResult<MangaResponse> = await pool.query(
       mangaInsertQuery,
-      [
-        isbn,
-        title,
-        volume,
-        author,
-        language,
-        stock,
-        price,
-        publicationYear,
-        addedDate,
-      ]
+      [isbn, title, volume, author, language, stock, price, publicationYear]
     );
 
     if (rowCount === 0) {
@@ -176,12 +160,12 @@ export const updateManga: RequestHandler<
     await pool.query("BEGIN");
 
     // check if the manga exists
-    const mangaExists: QueryResult = await pool.query(
+    const { rowCount }: QueryResult<MangaResponse> = await pool.query(
       "SELECT id FROM manga WHERE id = $1 FOR UPDATE",
       [mangaId]
     );
 
-    if (mangaExists.rowCount === 0) {
+    if (rowCount === 0) {
       await pool.query("ROLLBACK");
       res.status(404).json({ error: "Manga not found" });
       return;
@@ -193,6 +177,14 @@ export const updateManga: RequestHandler<
     let index = 1;
 
     Object.entries(updatedFields).forEach(([key, value]) => {
+      if (key === "addedDate") {
+        key = "added_date";
+      }
+
+      if (key === "publicationYear") {
+        key = "publication_year";
+      }
+
       if (value !== undefined) {
         setClauses.push(`${key} = $${index}`);
         values.push(value);

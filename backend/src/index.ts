@@ -1,6 +1,7 @@
 import express from "express";
 import { Request, Response } from "express-serve-static-core";
 import storeRoutes from "./routes/inventory";
+import filterRoutes from "./routes/filter";
 import { errorHandler } from "./handlers/error";
 
 const app = express();
@@ -17,7 +18,10 @@ app.get("/", (req: Request, res: Response) => {
     .json({ message: "Hello Welcome To The Manga Inventory Server!" });
 });
 
+// REST API routes
 app.use("/inventory", storeRoutes);
+// FILTERS routes
+app.use("/filter", filterRoutes);
 
 // error handling middleware
 app.use(errorHandler);
