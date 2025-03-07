@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { Request, Response } from "express-serve-static-core";
 import storeRoutes from "./routes/inventory";
 import filterRoutes from "./routes/filter";
@@ -6,6 +7,16 @@ import { errorHandler } from "./handlers/error";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// CORS middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 // middlewares
 app.use(express.json());

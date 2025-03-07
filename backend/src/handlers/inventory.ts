@@ -4,7 +4,6 @@ import pool from "../db";
 import { CreateMangaDto, UpdateMangaDto } from "../dtos/Manga.dto";
 import {
   MangaParams,
-  CreateMangaQueryParams,
   MangaResponse,
   HandlerResponse,
 } from "../types/routes-params";
@@ -93,8 +92,7 @@ export const getMangaById: RequestHandler<
 export const createManga: RequestHandler<
   {},
   HandlerResponse | ErrorResponse,
-  CreateMangaDto,
-  CreateMangaQueryParams
+  CreateMangaDto
 > = async (req, res, next): Promise<void> => {
   const {
     isbn,
@@ -108,18 +106,30 @@ export const createManga: RequestHandler<
     publicationYear,
   } = req.body;
 
+  const imageUrl = (req.file as any)?.path || "";
+
   try {
     await pool.query("BEGIN"); //start transaction
 
     const mangaInsertQuery = `
-      INSERT INTO manga (isbn, title, volume, author, language, stock, price, publication_year)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      INSERT INTO manga (isbn, title, volume, author, language, stock, price, publication_year, image_url)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
       RETURNING id;
     `;
 
     const { rows, rowCount }: QueryResult<MangaResponse> = await pool.query(
       mangaInsertQuery,
-      [isbn, title, volume, author, language, stock, price, publicationYear]
+      [
+        isbn,
+        title,
+        volume,
+        author,
+        language,
+        stock,
+        price,
+        publicationYear,
+        imageUrl,
+      ]
     );
 
     if (rowCount === 0) {

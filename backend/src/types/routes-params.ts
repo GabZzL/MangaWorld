@@ -1,7 +1,3 @@
-export interface CreateMangaQueryParams {
-  isData?: boolean;
-}
-
 export interface MangaParams {
   id: string;
 }
@@ -18,6 +14,7 @@ export interface MangaResponse {
   price: number;
   publicationYear: number;
   addedDate: string | Date;
+  imgUrl: string;
 }
 
 export interface HandlerResponse {

@@ -9,17 +9,9 @@ export interface CreateMangaDto {
   price: number;
   publicationYear: number;
   addedDate: string | Date;
+  imageUrl: string;
 }
 
-export interface UpdateMangaDto {
-  isbn?: string;
-  title?: string;
-  volume?: number;
-  author?: string;
-  genres?: string[];
-  language?: string;
-  stock?: number;
-  price?: number;
-  publicationYear?: number;
-  addedDate?: string | Date;
+export interface UpdateMangaDto extends CreateMangaDto {
+  id: string;
 }
