@@ -27,6 +27,7 @@ export const getMangas: RequestHandler<
         m.price,
         m.publication_year,
         m.added_date,
+        m.image_url,
         COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
       FROM manga m
       LEFT JOIN manga_genre mg ON m.id = mg.manga_id
@@ -68,6 +69,7 @@ export const getMangaById: RequestHandler<
         m.price,
         m.publication_year,
         m.added_date,
+        m.image_url,
         COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
       FROM manga m
       LEFT JOIN manga_genre mg ON m.id = mg.manga_id
