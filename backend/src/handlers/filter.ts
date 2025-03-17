@@ -40,14 +40,13 @@ export const searchManga: RequestHandler<
             m.price, 
             m.publication_year, 
             m.added_date, 
-            ts_rank(m.search_vector, to_tsquery('english', $1)) AS rank,
+            m.image_url,
             COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
         FROM manga m
         LEFT JOIN manga_genre mg ON m.id = mg.manga_id
         LEFT JOIN genre g ON mg.genre_id = g.id
         WHERE m.search_vector @@ to_tsquery('english', $1)
-        GROUP BY m.id
-        ORDER BY rank DESC;`,
+        GROUP BY m.id;`,
       [searchQuery]
     );
 
@@ -90,7 +89,8 @@ export const filterMangaByGenre: RequestHandler<
         m.stock, 
         m.price, 
         m.publication_year, 
-        m.added_date, 
+        m.added_date,
+        m.image_url,
         COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
     FROM manga m
     LEFT JOIN manga_genre mg ON m.id = mg.manga_id
@@ -136,6 +136,7 @@ export const filterMangaByLanguage: RequestHandler<
         m.price,
         m.publication_year,
         m.added_date,
+        m.image_url,
         COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
       FROM manga m
       LEFT JOIN manga_genre mg ON m.id = mg.manga_id
@@ -186,6 +187,7 @@ export const filterMangaByPublicationYear: RequestHandler<
         m.price,
         m.publication_year,
         m.added_date,
+        m.image_url,
         COALESCE(json_agg(g.name) FILTER (WHERE g.name IS NOT NULL), '[]') AS genres
       FROM manga m
       LEFT JOIN manga_genre mg ON m.id = mg.manga_id
