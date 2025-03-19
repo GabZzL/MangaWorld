@@ -1,5 +1,4 @@
 import React from "react";
-import SearchBar from "../UI/SearchBar";
 import HeaderLogo from "../UI/HeaderLogo";
 import NavBar from "../UI/NavBar";
 import MobileMenu from "../UI/MobileMenu";
@@ -11,7 +10,6 @@ const Header: React.FC = () => {
     <header className={styles.header}>
       <div className={`${styles["header-container"]} ${styles.container}`}>
         <HeaderLogo />
-        <SearchBar />
         <MobileMenu />
         <NavBar />
       </div>

@@ -3,15 +3,15 @@ import { useNavigate } from "react-router";
 import SearchBar from "../UI/SearchBar";
 
 const SearchManga = () => {
-  const [query, setQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (value: string) => {
-    setQuery(value);
+    setSearchTerm(value);
   };
 
   const handleClickButton = () => {
-    navigate(`/storage/${query}`);
+    navigate(`/storage/search?query=${encodeURIComponent(searchTerm)}`);
   };
 
   return (
@@ -20,7 +20,7 @@ const SearchManga = () => {
         onInputChange={handleInputChange}
         onClickButton={handleClickButton}
       />
-      <div>Current value: {query}</div>
+      <div>Current value: {searchTerm}</div>
     </>
   );
 };

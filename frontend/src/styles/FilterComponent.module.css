@@ -1,0 +1,32 @@
+.filterContainer {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filterTitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.filterGroup {
+  margin-bottom: 1rem;
+}
+
+.filterGroup label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.filterGroup select,
+.filterGroup input {
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+}

@@ -7,8 +7,31 @@ export interface MangaResponse {
   language: string;
   stock: number;
   price: number;
-  image_url: string;
+  image_url: string | null;
   publication_year: number;
   added_date: string;
   genres: string[];
+}
+
+export interface LoaderSearchParams {
+  params: {
+    userQuery: string;
+  };
+}
+
+export interface ErrorProps {
+  title?: string;
+  status?: number;
+  message?: string;
+  statusText?: string;
+}
+
+export type ValidOperations =
+  | "search"
+  | "filter-genre"
+  | "filter-year"
+  | "filter-language";
+
+export interface MangaItemProps {
+  manga: MangaResponse;
 }
