@@ -16,6 +16,14 @@
   border-radius: 4px;
 }
 
+.title {
+  cursor: pointer;
+}
+
+.title:hover {
+  color: var(--primary);
+}
+
 .mangaDetails {
   flex: 1;
 }

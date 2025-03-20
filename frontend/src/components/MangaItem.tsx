@@ -1,21 +1,26 @@
 // src/components/MangaItem.tsx
 import React from "react";
-import styles from "../styles/MangaItem.module.css";
+import { Link } from "react-router-dom";
 import { MangaItemProps } from "../types/manga-types";
+import NotFoundImage from "../assets/NotFound.jpg";
+import styles from "../styles/MangaItem.module.css";
 
 const MangaItem: React.FC<MangaItemProps> = ({ manga }) => {
   return (
     <div className={styles.mangaItem}>
       <img
-        src={manga.image_url || "/placeholder.jpg"}
+        src={manga.image_url || NotFoundImage}
         alt={manga.title}
         className={styles.mangaImage}
       />
 
       <div className={styles.mangaDetails}>
-        <h3>
-          {manga.title} (Vol. {manga.volume})
-        </h3>
+        <Link to={`/manga/${manga.id}`} className={styles.title}>
+          <h3>
+            {manga.title} (Vol. {manga.volume})
+          </h3>
+        </Link>
+
         <p>
           <strong>Author:</strong> {manga.author}
         </p>

@@ -1,0 +1,77 @@
+.form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #646cff;
+  box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
+}
+
+.selectMultiple {
+  height: 120px;
+  padding: 0.5rem;
+}
+
+.fileInput {
+  padding: 0.5rem;
+  background-color: #404040;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.error {
+  display: block;
+  margin-top: 0.5rem;
+  color: #ff4444;
+  font-size: 0.875rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 2px;
+}
+
+.submitButton:hover {
+  background-color: #535bf2;
+}
+
+.submitButton:active {
+  background-color: #434ad9;
+}

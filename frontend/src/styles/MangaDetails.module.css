@@ -1,0 +1,55 @@
+.mangaDetail {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: auto;
+}
+
+.cover {
+  width: 150px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.info {
+  flex: 1;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.actions {
+  margin-top: 15px;
+}
+
+.editButton,
+.deleteButton {
+  padding: 8px 12px;
+  margin-right: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.editButton {
+  background: #007bff;
+  color: white;
+}
+
+.deleteButton {
+  background: #dc3545;
+  color: white;
+}

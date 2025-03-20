@@ -3,7 +3,7 @@ import {
   filterMangaByGenre,
   filterMangaByLanguage,
   filterMangaByPublicationYear,
-} from "../services/manga-crud";
+} from "../services/manga-filter";
 import { MangaResponse } from "../types/manga-types";
 import createError from "./create-error";
 

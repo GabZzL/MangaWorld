@@ -16,7 +16,7 @@ const apiRequest = async <T>(
       data,
       ...config,
     });
-
+    
     return res.data as T;
   } catch (error) {
     handleApiError(error);

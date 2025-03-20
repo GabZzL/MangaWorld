@@ -19,6 +19,10 @@ export interface LoaderSearchParams {
   };
 }
 
+export interface LoaderSingleManga {
+  params: { id: string };
+}
+
 export interface ErrorProps {
   title?: string;
   status?: number;

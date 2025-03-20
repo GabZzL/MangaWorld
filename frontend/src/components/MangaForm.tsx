@@ -1,174 +1,201 @@
-import React, { useState, useRef, ChangeEvent, FormEvent } from "react";
+import React, { useState } from "react";
+import { Form, useNavigate } from "react-router-dom";
+import styles from "../styles/MangaForm.module.css";
 
-interface MangaFormData {
-  isbn: string;
-  title: string;
-  volume: number;
-  author: string;
-  genres: string;
-  language: string;
-  stock: number;
-  price: number;
-  publicationYear: number;
-  image?: File;
-}
+const MangaForm: React.FC = ({ initialData, onSubmit }) => {
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
-interface ApiResponse {
-  message?: string;
-  error?: string;
-}
-
-const MangaForm: React.FC = () => {
-  const [formState, setFormState] = useState<MangaFormData>({
-    isbn: "",
-    title: "",
-    volume: 1,
-    author: "",
-    genres: "",
-    language: "Japanese",
-    stock: 10,
-    price: 19.99,
-    publicationYear: 2011,
-  });
-
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [response, setResponse] = useState<ApiResponse | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.[0]) {
-      const file = e.target.files[0];
-      setFormState((prev) => ({ ...prev, image: file }));
-      setPreviewImage(URL.createObjectURL(file));
-    }
-  };
-
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: name === "genres" ? value : parseFloat(value) || value,
-    }));
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const formData = new FormData();
-
-    // Append image file
-    if (formState.image) {
-      formData.append("image", formState.image);
-    }
-
-    const genresArray = formState.genres
-      .split(",")
-      .map((g) => g.trim())
-      .filter((g) => g.length > 0);
-
-    // Append other fields
-    Object.entries(formState).forEach(([key, value]) => {
-      if (key === "image") return;
-
-      if (key === "genres") {
-        // Append each genre individually
-        genresArray.forEach((genre) => formData.append("genres", genre));
-      } else {
-        formData.append(key, value.toString());
-      }
-    });
-
-    try {
-      const response = await fetch("http://localhost:3000/inventory", {
-        method: "POST",
-        body: formData, // Content-Type header will be set automatically
-      });
-
-      const data: ApiResponse = await response.json();
-      setResponse(data);
-
-      if (response.ok) {
-        // Reset form on success
-        setFormState({
-          isbn: "",
-          title: "",
-          volume: 1,
-          author: "",
-          genres: "",
-          language: "Japanese",
-          stock: 10,
-          price: 19.99,
-          publicationYear: new Date().getFullYear(),
-        });
-        setPreviewImage(null);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      }
-    } catch (error) {
-      setResponse({ error: "Network error - check console" });
-      console.error("Submission error:", error);
-    }
+  const cancelAction = () => {
+    navigate("..");
   };
 
   return (
-    <div className="form-container">
-      <h1>Create Manga</h1>
+    <Form className={styles.form}>
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="isbn">
+          ISBN:
+        </label>
+        <input
+          type="text"
+          id="isbn"
+          name="isbn"
+          minLength={10}
+          maxLength={13}
+          className={styles.input}
+          required
+        />
+        {errors.isbn && (
+          <span className={styles.error}>{errors.isbn._errors[0]}</span>
+        )}
+      </div>
 
-      <form onSubmit={handleSubmit}>
-        {/* Image Upload */}
-        <div className="form-group">
-          <label htmlFor="image">Cover Image:</label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            onChange={handleImageChange}
-            accept="image/*"
-            ref={fileInputRef}
-            required
-          />
-          {previewImage && (
-            <img src={previewImage} alt="Preview" className="image-preview" />
-          )}
-        </div>
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="title">
+          Title:
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          minLength={3}
+          className={styles.input}
+          required
+        />
+        {errors.title && (
+          <span className={styles.error}>{errors.title._errors[0]}</span>
+        )}
+      </div>
 
-        {/* Text Inputs */}
-        {Object.entries(formState).map(([key, value]) => {
-          if (key === "image") return null;
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="volume">
+          Volume:
+        </label>
+        <input
+          type="number"
+          id="volume"
+          name="volume"
+          className={styles.input}
+          min={0}
+          required
+        />
+        {errors.volume && (
+          <span className={styles.error}>{errors.volume._errors[0]}</span>
+        )}
+      </div>
 
-          return (
-            <div className="form-group" key={key}>
-              <label htmlFor={key}>
-                {key.charAt(0).toUpperCase() + key.slice(1)}:
-              </label>
-              <input
-                type={typeof value === "number" ? "number" : "text"}
-                id={key}
-                name={key}
-                value={value}
-                onChange={handleInputChange}
-                required
-                step={key === "price" ? 0.01 : undefined}
-              />
-              {key === "genres" && (
-                <small className="hint">
-                  Comma-separated (e.g., Action, Adventure)
-                </small>
-              )}
-            </div>
-          );
-        })}
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="author">
+          Author:
+        </label>
+        <input
+          type="text"
+          id="author"
+          name="author"
+          minLength={3}
+          className={styles.input}
+          required
+        />
+        {errors.author && (
+          <span className={styles.error}>{errors.author._errors[0]}</span>
+        )}
+      </div>
 
-        <button type="submit">Submit</button>
-      </form>
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="language">
+          Language:
+        </label>
+        <input
+          type="text"
+          id="language"
+          name="language"
+          minLength={3}
+          className={styles.input}
+          required
+        />
+        {errors.language && (
+          <span className={styles.error}>{errors.language._errors[0]}</span>
+        )}
+      </div>
 
-      {/* Response Feedback */}
-      {response && (
-        <div className={`response ${response.error ? "error" : "success"}`}>
-          {response.message || response.error}
-        </div>
-      )}
-    </div>
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="stock">
+          Stock:
+        </label>
+        <input
+          type="number"
+          id="stock"
+          name="stock"
+          min={0}
+          className={styles.input}
+          required
+        />
+        {errors.stock && (
+          <span className={styles.error}>{errors.stock._errors[0]}</span>
+        )}
+      </div>
+
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="price">
+          Price:
+        </label>
+        <input
+          type="text"
+          id="price"
+          name="price"
+          minLength={1}
+          className={styles.input}
+          required
+        />
+        {errors.price && (
+          <span className={styles.error}>{errors.price._errors[0]}</span>
+        )}
+      </div>
+
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="publication_year">
+          Publication Year:
+        </label>
+        <input
+          type="number"
+          id="publication_year"
+          name="publication_year"
+          minLength={4}
+          className={styles.input}
+          required
+        />
+        {errors.publication_year && (
+          <span className={styles.error}>
+            {errors.publication_year._errors[0]}
+          </span>
+        )}
+      </div>
+
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="genres">
+          Genres:
+        </label>
+        <select
+          multiple
+          id="genres"
+          name="genres"
+          className={`${styles.input} ${styles.selectMultiple}`}
+        >
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Comedy">Comedy</option>
+          <option value="Fantasy">Fantasy</option>
+        </select>
+        {errors.genres && (
+          <span className={styles.error}>{errors.genres._errors[0]}</span>
+        )}
+      </div>
+
+      <div className={styles.formGroup}>
+        <label className={styles.label} htmlFor="image">
+          Upload Image:
+        </label>
+        <input
+          type="file"
+          id="image"
+          accept="image/jpeg"
+          className={styles.fileInput}
+        />
+      </div>
+
+      <div>
+        <button
+          type="button"
+          onClick={cancelAction}
+          className={styles.submitButton}
+        >
+          Cancel
+        </button>
+        <button className={styles.submitButton}>
+          {initialData ? "Update" : "Create"} Manga
+        </button>
+      </div>
+    </Form>
   );
 };
 
