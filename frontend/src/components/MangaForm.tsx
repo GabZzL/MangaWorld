@@ -1,17 +1,60 @@
-import React, { useState } from "react";
-import { Form, useNavigate } from "react-router-dom";
+import React, { useState, ChangeEvent } from "react";
+import { Form, useNavigate, ActionFunction, redirect } from "react-router-dom";
+import { createManga, updateManga } from "../services/manga-crud";
+import createError from "../utils/create-error";
+import { MangaFormProps } from "../types/manga-types";
 import styles from "../styles/MangaForm.module.css";
 
-const MangaForm: React.FC = ({ initialData, onSubmit }) => {
+const AVAILABLE_GENRES = [
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Drama",
+  "Fantasy",
+  "Horror",
+  "Romance",
+  "Sci-Fi",
+  "Slice of Life",
+  "Sports",
+];
+
+const MangaForm: React.FC<MangaFormProps> = ({ initialData, method }) => {
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [selectedGenres, setSelectedGenres] = useState<string[]>(
+    initialData?.genres || []
+  );
   const navigate = useNavigate();
-  const [errors, setErrors] = useState({});
 
   const cancelAction = () => {
     navigate("..");
   };
 
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      const file = e.target.files[0];
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleGenreChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const options = event.target.options;
+    const selectedValues: string[] = [];
+
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) {
+        selectedValues.push(options[i].value);
+      }
+    }
+
+    setSelectedGenres(selectedValues);
+  };
+
   return (
-    <Form className={styles.form}>
+    <Form
+      method={method}
+      encType={"multipart/form-data"}
+      className={styles.form}
+    >
       <div className={styles.formGroup}>
         <label className={styles.label} htmlFor="isbn">
           ISBN:
@@ -23,11 +66,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           minLength={10}
           maxLength={13}
           className={styles.input}
+          defaultValue={initialData?.isbn}
           required
         />
-        {errors.isbn && (
-          <span className={styles.error}>{errors.isbn._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -40,11 +81,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="title"
           minLength={3}
           className={styles.input}
+          defaultValue={initialData?.title}
           required
         />
-        {errors.title && (
-          <span className={styles.error}>{errors.title._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -57,11 +96,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="volume"
           className={styles.input}
           min={0}
+          defaultValue={initialData?.volume}
           required
         />
-        {errors.volume && (
-          <span className={styles.error}>{errors.volume._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -74,11 +111,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="author"
           minLength={3}
           className={styles.input}
+          defaultValue={initialData?.author}
           required
         />
-        {errors.author && (
-          <span className={styles.error}>{errors.author._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -91,11 +126,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="language"
           minLength={3}
           className={styles.input}
+          defaultValue={initialData?.language}
           required
         />
-        {errors.language && (
-          <span className={styles.error}>{errors.language._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -108,11 +141,9 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="stock"
           min={0}
           className={styles.input}
+          defaultValue={initialData?.stock}
           required
         />
-        {errors.stock && (
-          <span className={styles.error}>{errors.stock._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -125,30 +156,24 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           name="price"
           minLength={1}
           className={styles.input}
+          defaultValue={initialData?.price}
           required
         />
-        {errors.price && (
-          <span className={styles.error}>{errors.price._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
-        <label className={styles.label} htmlFor="publication_year">
+        <label className={styles.label} htmlFor="publicationYear">
           Publication Year:
         </label>
         <input
           type="number"
-          id="publication_year"
-          name="publication_year"
+          id="publicationYear"
+          name="publicationYear"
           minLength={4}
           className={styles.input}
+          defaultValue={initialData?.publication_year}
           required
         />
-        {errors.publication_year && (
-          <span className={styles.error}>
-            {errors.publication_year._errors[0]}
-          </span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -159,16 +184,16 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
           multiple
           id="genres"
           name="genres"
+          value={selectedGenres}
+          onChange={handleGenreChange}
           className={`${styles.input} ${styles.selectMultiple}`}
         >
-          <option value="Action">Action</option>
-          <option value="Adventure">Adventure</option>
-          <option value="Comedy">Comedy</option>
-          <option value="Fantasy">Fantasy</option>
+          {AVAILABLE_GENRES.map((genre) => (
+            <option key={genre} value={genre}>
+              {genre}
+            </option>
+          ))}
         </select>
-        {errors.genres && (
-          <span className={styles.error}>{errors.genres._errors[0]}</span>
-        )}
       </div>
 
       <div className={styles.formGroup}>
@@ -178,9 +203,15 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
         <input
           type="file"
           id="image"
-          accept="image/jpeg"
+          name="image"
+          accept="image/jpeg,image/png"
           className={styles.fileInput}
+          onChange={handleImageChange}
         />
+        {initialData?.image_url && (
+          <img src={initialData.image_url} alt="manga image" />
+        )}
+        {previewImage && <img src={previewImage} alt="preview" />}
       </div>
 
       <div>
@@ -200,3 +231,60 @@ const MangaForm: React.FC = ({ initialData, onSubmit }) => {
 };
 
 export default MangaForm;
+
+export const FormAction: ActionFunction = async ({ request, params }) => {
+  const method = request.method.toLowerCase();
+  const formData = await request.formData();
+
+  console.log(method);
+
+  if (method === "patch") {
+    const mangaId = params.id;
+
+    const updatedManga = {
+      title: formData.get("title") as string,
+      author: formData.get("author") as string,
+      isbn: formData.get("isbn") as string,
+      volume: Number(formData.get("volume")),
+      language: formData.get("language") as string,
+      stock: Number(formData.get("stock")),
+      price: Number(formData.get("price")),
+      publicationYear: Number(formData.get("publicationYear")),
+      genres: formData.getAll("genres") as string[],
+    };
+
+    const response = await updateManga(mangaId, updatedManga);
+
+    if (!response) {
+      createError({
+        status: 500,
+        message: "Could not update the manga",
+        statusText: "Interval Server Error",
+      });
+    }
+  }
+
+  if (method === "post") {
+    const imageFile = formData.get("image") as File;
+
+    if (!imageFile || imageFile.size === 0) {
+      createError({
+        status: 400,
+        message: "Could not create manga",
+        statusText: "Image file is required",
+      });
+    }
+
+    const response = await createManga(formData);
+
+    if (!response) {
+      createError({
+        status: 500,
+        message: "Could not create manga",
+        statusText: "Interval Server Error",
+      });
+    }
+  }
+
+  return redirect("/storage");
+};

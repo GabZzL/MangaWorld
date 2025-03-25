@@ -1,3 +1,5 @@
+import { HTMLFormMethod } from "react-router";
+
 export interface MangaResponse {
   id: number;
   isbn: string;
@@ -11,6 +13,10 @@ export interface MangaResponse {
   publication_year: number;
   added_date: string;
   genres: string[];
+}
+
+export interface MangaActionResponse {
+  message: string;
 }
 
 export interface LoaderSearchParams {
@@ -38,4 +44,9 @@ export type ValidOperations =
 
 export interface MangaItemProps {
   manga: MangaResponse;
+}
+
+export interface MangaFormProps {
+  initialData?: MangaResponse | null;
+  method: HTMLFormMethod;
 }

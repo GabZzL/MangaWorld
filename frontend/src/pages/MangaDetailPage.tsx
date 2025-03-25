@@ -1,13 +1,19 @@
 import React, { Suspense } from "react";
-import { Await, useLoaderData, LoaderFunctionArgs } from "react-router-dom";
+import {
+  Await,
+  useRouteLoaderData,
+  LoaderFunctionArgs,
+  ActionFunctionArgs,
+  redirect,
+} from "react-router-dom";
 import Fallback from "../UI/Fallback";
 import MangaDetail from "../components/MangaDetails";
-import { searchSingleManga } from "../services/manga-crud";
+import { searchSingleManga, deleteManga } from "../services/manga-crud";
 import createError from "../utils/create-error";
 import { MangaResponse, LoaderSingleManga } from "../types/manga-types";
 
 const MangaDetailPage: React.FC = () => {
-  const manga: MangaResponse = useLoaderData();
+  const manga: MangaResponse = useRouteLoaderData("manga-details");
 
   return (
     <Suspense fallback={<Fallback />}>
@@ -42,4 +48,22 @@ export const Loader = async ({
   }
 
   return response;
+};
+
+export const Action = async ({
+  params,
+}: ActionFunctionArgs<LoaderSingleManga>) => {
+  const { id } = params;
+
+  const response = await deleteManga(id);
+
+  if (!response) {
+    createError({
+      status: 500,
+      message: "It was not possible delete the manga",
+      statusText: "Server Error",
+    });
+  }
+
+  return redirect("/");
 };

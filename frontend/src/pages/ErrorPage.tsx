@@ -9,6 +9,8 @@ const ErrorMangaPage = () => {
   let status = 500;
   let message = "Something went wrong!";
 
+  console.log(error);
+
   if (isRouteErrorResponse(error)) {
     status = error.status;
     title = error.statusText;

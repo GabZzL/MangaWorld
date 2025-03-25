@@ -168,6 +168,8 @@ export const updateManga: RequestHandler<
   const mangaId = req.params.id;
   const { genres, ...updatedFields } = req.body;
 
+  console.log("patching manga");
+
   try {
     await pool.query("BEGIN");
 

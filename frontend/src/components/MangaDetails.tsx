@@ -1,9 +1,24 @@
 import React from "react";
+import { Link, useSubmit } from "react-router-dom";
 import { MangaItemProps } from "../types/manga-types";
 import NotFoundImage from "../assets/NotFound.jpg";
 import styles from "../styles/MangaDetails.module.css";
 
 const MangaDetail: React.FC<MangaItemProps> = ({ manga }) => {
+  const submit = useSubmit();
+
+  const handleDeleteManga = () => {
+    const procced = window.confirm(
+      "Are you sure you want to delete this manga?"
+    );
+
+    if (!procced) {
+      return;
+    }
+
+    submit(null, { method: "delete" });
+  };
+
   return (
     <div className={styles.mangaDetail}>
       <img
@@ -32,8 +47,12 @@ const MangaDetail: React.FC<MangaItemProps> = ({ manga }) => {
           <strong>Genres:</strong> {manga.genres.join(", ")}
         </p>
         <div className={styles.actions}>
-          <button className={styles.editButton}>Edit</button>
-          <button className={styles.deleteButton}>Delete</button>
+          <Link to={"edit"} className={styles.editButton}>
+            Edit
+          </Link>
+          <button className={styles.deleteButton} onClick={handleDeleteManga}>
+            Delete
+          </button>
         </div>
       </div>
     </div>
