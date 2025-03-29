@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { useLoaderData } from "react-router";
 import { Await } from "react-router";
 import { MangaResponse } from "../types/manga-types";
@@ -6,7 +6,7 @@ import MangaItem from "../components/MangaItem";
 import Fallback from "../UI/Fallback";
 import styles from "../styles/MangaList.module.css";
 
-const MangaList: React.FC = () => {
+const MangaList = () => {
   const mangas: MangaResponse[] = useLoaderData();
 
   return (

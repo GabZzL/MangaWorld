@@ -1,7 +1,6 @@
-import React from "react";
 import MangaForm from "../components/MangaForm";
 
-const NewManga: React.FC = () => {
+const NewManga = () => {
   return <MangaForm method="post" />;
 };
 

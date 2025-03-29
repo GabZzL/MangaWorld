@@ -140,8 +140,6 @@ export const createManga: RequestHandler<
       return;
     }
 
-    console.log(genres);
-
     const mangaId = rows[0].id;
     // insert genres
     if (genres.length > 0) {
@@ -169,8 +167,6 @@ export const updateManga: RequestHandler<
 > = async (req, res, next): Promise<void> => {
   const mangaId = req.params.id;
   const { genres, ...updatedFields } = req.body;
-
-  console.log("patching manga");
 
   try {
     await pool.query("BEGIN");

@@ -5,13 +5,18 @@ import storeRoutes from "./routes/inventory";
 import filterRoutes from "./routes/filter";
 import { errorHandler } from "./handlers/error";
 
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const app = express();
 const port = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === "production";
 
 // CORS middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: isProduction ? process.env.FRONTEND_URL : "http://localhost:5173",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

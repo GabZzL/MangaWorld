@@ -3,14 +3,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const password = process.env.DATABASE_PASSWORD;
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  password: password,
-  database: "inventory",
-  port: 5432,
+  user: process.env.DATABASE_USER,
+  host: process.env.DATABASE_HOST,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  port: Number(process.env.DATEBASE_PORT),
 });
 
 export default pool;

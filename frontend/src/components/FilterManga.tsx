@@ -17,7 +17,7 @@ const GENRES = [
 
 const LANGUAGES = ["English", "Japanese"];
 
-const FilterManga: React.FC = () => {
+const FilterManga = () => {
   const [selectedGenre, setSelectedGenre] = useState(GENRES[0] || "");
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGES[0] || "");
   const [publicationYear, setPublicationYear] = useState("");

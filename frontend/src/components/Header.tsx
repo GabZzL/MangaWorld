@@ -1,9 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import LogoIcon from "../assets/Logo.svg";
 import styles from "../styles/Header.module.css";
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     <header className={styles.header}>
       <nav className={`${styles["nav-bar"]} ${styles.container}`}>

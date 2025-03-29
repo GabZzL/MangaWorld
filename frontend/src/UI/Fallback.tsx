@@ -1,7 +1,6 @@
-import React from "react";
 import styles from "../styles/Fallback.module.css";
 
-const Fallback: React.FC = () => {
+const Fallback = () => {
   return (
     <div className={styles.fallbackContainer}>
       <div className={styles.loader}></div>
