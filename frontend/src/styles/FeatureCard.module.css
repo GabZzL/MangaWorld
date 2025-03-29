@@ -1,0 +1,11 @@
+.feature-card {
+  padding: 2rem;
+  border: 2px solid var(--primary-color);
+  text-align: center;
+}
+
+.feature-icon {
+  width: 62px;
+  height: auto;
+  margin-bottom: 1rem;
+}

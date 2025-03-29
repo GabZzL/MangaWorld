@@ -140,6 +140,8 @@ export const createManga: RequestHandler<
       return;
     }
 
+    console.log(genres);
+
     const mangaId = rows[0].id;
     // insert genres
     if (genres.length > 0) {

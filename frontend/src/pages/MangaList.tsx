@@ -11,17 +11,24 @@ const MangaList: React.FC = () => {
 
   return (
     <Suspense fallback={<Fallback />}>
-      <Await resolve={mangas}>
-        {() => (
-          <div className={styles.mangaList}>
-            {mangas.length > 0 ? (
-              mangas.map((manga) => <MangaItem key={manga.id} manga={manga} />)
-            ) : (
-              <p className={styles.noResults}>No mangas found.</p>
+      <section className={styles["manga-list"]}>
+        <h2 className={styles["section-title"]}>Featured Manga</h2>
+        <div className={styles["manga-grid"]}>
+          <Await resolve={mangas}>
+            {() => (
+              <>
+                {mangas.length > 0 ? (
+                  mangas.map((manga) => (
+                    <MangaItem key={manga.id} manga={manga} />
+                  ))
+                ) : (
+                  <p className={styles.noResults}>No mangas found.</p>
+                )}
+              </>
             )}
-          </div>
-        )}
-      </Await>
+          </Await>
+        </div>
+      </section>
     </Suspense>
   );
 };

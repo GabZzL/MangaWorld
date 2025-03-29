@@ -29,26 +29,27 @@ const FilterManga: React.FC = () => {
       navigate(`/storage/filter-genre?query=${encodeURIComponent(value)}`);
     } else if (filter === "language") {
       navigate(`/storage/filter-language?query=${encodeURIComponent(value)}`);
-    } else if (filter === "publicationYear") {
+    } else if (filter === "publicationYear" && value.length === 4) {
       navigate(`/storage/filter-year?query=${encodeURIComponent(value)}`);
     }
   };
 
   return (
-    <div className={styles.filterContainer}>
-      <h3 className={styles.filterTitle}>Filter Mangas</h3>
-
-      <div className={styles.filterGroup}>
-        <label htmlFor="genre">Genre</label>
+    <section className={styles.filters}>
+      <h2 className={styles["visually-hidden"]}>Filter Options</h2>
+      <div className={styles["filter-group"]}>
+        <label htmlFor="genre" className={styles["filter-label"]}>
+          Genre
+        </label>
         <select
           id="genre"
+          className={styles["filter-select"]}
           value={selectedGenre}
           onChange={(e) => {
             setSelectedGenre(e.target.value);
             onFilterChange("genre", e.target.value);
           }}
         >
-          <option value="">None</option>
           {GENRES.map((genre) => (
             <option key={genre} value={genre}>
               {genre}
@@ -56,40 +57,44 @@ const FilterManga: React.FC = () => {
           ))}
         </select>
       </div>
-
-      <div className={styles.filterGroup}>
-        <label htmlFor="language">Language</label>
+      <div className={styles["filter-group"]}>
+        <label htmlFor="language" className={styles["filter-label"]}>
+          Language
+        </label>
         <select
           id="language"
+          className={styles["filter-select"]}
           value={selectedLanguage}
           onChange={(e) => {
             setSelectedLanguage(e.target.value);
             onFilterChange("language", e.target.value);
           }}
         >
-          <option value="">None</option>
-          {LANGUAGES.map((lang) => (
-            <option key={lang} value={lang}>
-              {lang}
+          {LANGUAGES.map((lan) => (
+            <option key={lan} value={lan}>
+              {lan}
             </option>
           ))}
         </select>
       </div>
-
-      <div className={styles.filterGroup}>
-        <label htmlFor="year">Publication Year</label>
+      <div className={styles["filter-group"]}>
+        <label htmlFor="year" className={styles["filter-label"]}>
+          Publication Year
+        </label>
         <input
           type="number"
           id="year"
           placeholder="Enter year"
           value={publicationYear}
+          className={styles["filter-select"]}
+          min="4"
           onChange={(e) => {
             setPublicationYear(e.target.value);
             onFilterChange("publicationYear", e.target.value);
           }}
         />
       </div>
-    </div>
+    </section>
   );
 };
 

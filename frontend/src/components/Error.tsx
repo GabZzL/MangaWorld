@@ -1,13 +1,14 @@
 import { FC } from "react";
 import { NavLink } from "react-router";
 import { ErrorProps } from "../types/manga-types";
+import ErrorIcon from "../assets/ErrorIcon.png";
 import styles from "../styles/Error.module.css";
 
 const Error: FC<ErrorProps> = ({ title, status, message }) => {
   return (
     <div className={styles["error-container"]}>
       <img
-        src="/api/placeholder/200/200"
+        src={ErrorIcon}
         alt="Error Illustration"
         className={styles["error-image"]}
       />

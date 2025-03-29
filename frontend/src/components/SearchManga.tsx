@@ -15,13 +15,10 @@ const SearchManga = () => {
   };
 
   return (
-    <>
-      <SearchBar
-        onInputChange={handleInputChange}
-        onClickButton={handleClickButton}
-      />
-      <div>Current value: {searchTerm}</div>
-    </>
+    <SearchBar
+      onInputChange={handleInputChange}
+      onClickButton={handleClickButton}
+    />
   );
 };
 

@@ -1,4 +1,3 @@
-// src/components/MangaItem.tsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { MangaItemProps } from "../types/manga-types";
@@ -7,40 +6,37 @@ import styles from "../styles/MangaItem.module.css";
 
 const MangaItem: React.FC<MangaItemProps> = ({ manga }) => {
   return (
-    <div className={styles.mangaItem}>
+    <article className={styles["manga-card"]}>
       <img
+        className={styles["manga-cover"]}
         src={manga.image_url || NotFoundImage}
-        alt={manga.title}
-        className={styles.mangaImage}
+        alt="Manga Cover"
+        width="220"
+        height="292"
       />
-
-      <div className={styles.mangaDetails}>
+      <div className={styles["manga-details"]}>
         <Link to={`/manga/${manga.id}`} className={styles.title}>
-          <h3>
-            {manga.title} (Vol. {manga.volume})
-          </h3>
+          <h3 className={styles["manga-title"]}>{manga.title}</h3>
         </Link>
 
-        <p>
-          <strong>Author:</strong> {manga.author}
-        </p>
-        <p>
-          <strong>Language:</strong> {manga.language}
-        </p>
-        <p>
-          <strong>Publication Year:</strong> {manga.publication_year}
-        </p>
-        <p>
-          <strong>Genres:</strong> {manga.genres.join(", ") || "N/A"}
-        </p>
-        <p>
-          <strong>Price:</strong> ${manga.price}
-        </p>
-        <p>
-          <strong>Stock:</strong> {manga.stock} available
-        </p>
+        <dl className={styles["manga-info"]}>
+          <dt>Author:</dt>
+          <dd>{manga.author}</dd>
+          <dt>Genres:</dt>
+          <dd>{manga.genres.join(", ") || "N/A"}</dd>
+          <dt>Price:</dt>
+          <dd>${manga.price}</dd>
+          <dt>Stock:</dt>
+          <dd>{manga.stock}</dd>
+          <dt>Publication Year:</dt>
+          <dd>{manga["publication_year"]}</dd>
+          <dt>Language:</dt>
+          <dd>{manga.language}</dd>
+          <dt>Volumes:</dt>
+          <dd>{manga.volume}</dd>
+        </dl>
       </div>
-    </div>
+    </article>
   );
 };
 
