@@ -39,7 +39,7 @@ const MangaForm: React.FC<MangaFormProps> = ({ initialData, method }) => {
       aria-labelledby="formTitle"
     >
       <h2 id="formTitle" className={styles["form-title"]}>
-        Add New Manga
+        {method === "post" ? "Add New Manga" : "Edit Manga"}
       </h2>
 
       <div className={styles["form-grid"]}>

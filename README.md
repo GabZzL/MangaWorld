@@ -5,8 +5,6 @@
 
 MangaWorld is a full-stack web application designed to manage, explore, and organize manga collections. It provides powerful search capabilities and efficient inventory management through optimized database operations and modern web technologies.
 
-![MangaWorld Preview](/path-to-your-screenshot.png)
-
 ## Features
 
 ### Backend
@@ -63,11 +61,12 @@ MangaWorld is a full-stack web application designed to manage, explore, and orga
 | HTTP Client | Axios        |
 
 ## Preview
+
 **Home Page**
 
 ![Home Page Preview](./docs/images/home-01.png)
 
-![Home Page 2 Preview](./docs/images/home-02.png.png)
+![Home Page 2 Preview](./docs/images/home-02.png)
 
 **Inventory page**
 

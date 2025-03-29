@@ -6,8 +6,6 @@ import { MangaResponse } from "../types/manga-types";
 const EditManga: React.FC = () => {
   const manga: MangaResponse = useRouteLoaderData("manga-details");
 
-  console.log(manga);
-
   return <MangaForm method="patch" initialData={manga} />;
 };
 
